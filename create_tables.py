@@ -4,6 +4,12 @@ from sql_queries import create_table_queries, drop_table_queries
 
 def create_database():
    
+    """
+     Establish connection to database
+     parameters:
+     cur: cursor to the database
+     conn: database connection reference
+    """
    # - Creates and connects to the sparkifydb
    #- Returns the connection and cursor to sparkifydb
    
@@ -28,18 +34,25 @@ def create_database():
 
 
 def drop_tables(cur, conn):
-  
-  #  Drops each table using the queries in `drop_table_queries` list.
-  
+    """
+     Runs all the drop table queries defined in sql_queries.py
+     parameters:
+     cur: cursor to the database
+     conn: database connection reference
+    """
+    
     for query in drop_table_queries:
         cur.execute(query)
         conn.commit()
 
 
 def create_tables(cur, conn):
-    """
-   Creates each table using the queries in `create_table_queries` list. 
-   """
+     """
+     Runs all the create table queries defined in sql_queries.py
+     parameters:
+     cur: cursor to the database
+     conn: database connection reference 
+     """
     for query in create_table_queries:
         cur.execute(query)
         conn.commit()
@@ -47,13 +60,11 @@ def create_tables(cur, conn):
 
 def main():
     """
+    -This is driver function where all other functions are called
     - Drops (if exists) and Creates the sparkify database. 
-    
     - Establishes connection with the sparkify database and gets
-    cursor to it.  
-    
+      cursor to it.  
     - Drops all the tables.  
-    
     - Creates all tables needed. 
     
     - Finally, closes the connection. 
