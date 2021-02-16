@@ -79,6 +79,9 @@ The ```create_tables.py``` and ```etl.py``` file can also be run independently a
 Run create_tables.py
 Run etl.py 
 ```
+<<<<<<< HEAD
 
 
 [Pandas Documentation](https://pandas.pydata.org/pandas-docs/stable/)
+=======
+>>>>>>> 2cb3439e832335362cd12b3a55cb36432d5164eb
