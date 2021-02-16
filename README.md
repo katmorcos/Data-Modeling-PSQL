@@ -68,20 +68,8 @@ psycopg2 - PostgreSQL database adapter for Python
 
 
 ## How to run
-
-Run the drive program ```main.py``` as below.
-```
-python main.py
-```
-
-The ```create_tables.py``` and ```etl.py``` file can also be run independently as below:
+Run ```create_tables.py``` then ```etl.py``` :
 ```
 Run create_tables.py
 Run etl.py 
 ```
-<<<<<<< HEAD
-
-
-[Pandas Documentation](https://pandas.pydata.org/pandas-docs/stable/)
-=======
->>>>>>> 2cb3439e832335362cd12b3a55cb36432d5164eb
