@@ -6,38 +6,64 @@ from sql_queries import *
 
 
 def process_song_file(cur, filepath):
+    """
+    Process songs files and insert records into the Postgres database.
+    parameters:
+    cur: cursor reference
+    filepath: complete file path for the file to load
+    Returns:
+    None
+    """
+    
+    
     # open song file
-    df = 
+    df = pd.DataFrame([pd.read_json(filepath,typ='series',convert_dates=False)])
+    
+    for value in df.values:
+        num_songs, artist_id, artist_latitude, artist_longitude, artist_location, artist_name, song_id, title, duration, year = value
+        
 
     # insert song record
-    song_data = 
+    song_data = (song_id, title, artist_id, year, duration)
     cur.execute(song_table_insert, song_data)
     
     # insert artist record
-    artist_data = 
+    artist_data = (artist_id, artist_name, artist_location, artist_latitude, artist_longitude)
     cur.execute(artist_table_insert, artist_data)
 
 
 def process_log_file(cur, filepath):
+    """
+    Process log files and insert records into the Postgres database.
+    parameters:
+    cur: cursor reference
+    filepath: complete file path for the file to load
+    Returns:
+    None
+    """
     # open log file
-    df = 
+    df = pd.read_json(filepath,lines=True)
 
     # filter by NextSong action
-    df = 
+    df = df[df['page'] == "NextSong"].astype({'ts': 'datetime64[ms]'})
 
     # convert timestamp column to datetime
-    t = 
+    t = pd.Series(df['ts'], index=df.index)
     
     # insert time data records
-    time_data = 
-    column_labels = 
-    time_df = 
+    time_data = []
+    column_labels = ["timestamp", "hour", "day", "weelofyear", "month", "year", "weekday"]
+    #populate [] time_data
+    for data in t:
+        time_data.append([data ,data.hour, data.day, data.weekofyear, data.month, data.year, data.day_name()])
+        
+    time_df = pd.DataFrame.from_records(data = time_data, columns = column_labels)
 
     for i, row in time_df.iterrows():
         cur.execute(time_table_insert, list(row))
 
     # load user table
-    user_df = 
+    user_df = df[['userId','firstName','lastName','gender','level']]
 
     # insert user records
     for i, row in user_df.iterrows():
@@ -56,11 +82,21 @@ def process_log_file(cur, filepath):
             songid, artistid = None, None
 
         # insert songplay record
-        songplay_data = 
+        songplay_data = ( row.ts, row.userId, row.level, songid, artistid, row.sessionId, row.location, row.userAgent) 
         cur.execute(songplay_table_insert, songplay_data)
 
 
 def process_data(cur, conn, filepath, func):
+    """
+    Th function to load data from songs and event log files into Postgres database.
+    parameters:
+    cur: a database cursor reference
+    conn: database connection reference
+    filepath: parent directory where the files exists
+    func: function to call
+    Returns:
+    None
+    """
     # get all files matching extension from directory
     all_files = []
     for root, dirs, files in os.walk(filepath):
@@ -80,6 +116,11 @@ def process_data(cur, conn, filepath, func):
 
 
 def main():
+    """
+    Main function to call Process_song_file and process_log_file functions to load songs and log data into Postgres database.
+    Return:
+    None
+    """
     conn = psycopg2.connect("host=127.0.0.1 dbname=sparkifydb user=student password=student")
     cur = conn.cursor()
 
@@ -91,3 +132,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+    print("\n\n Finished Importing\n\n")
