@@ -47,12 +47,12 @@ def drop_tables(cur, conn):
 
 
 def create_tables(cur, conn):
-     """
+    """
      Runs all the create table queries defined in sql_queries.py
      parameters:
      cur: cursor to the database
-     conn: database connection reference 
-     """
+     conn: database connection reference
+    """
     for query in create_table_queries:
         cur.execute(query)
         conn.commit()
